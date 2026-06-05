@@ -1,20 +1,29 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# No AI, Yes Kitten 🐱
 
-# Run and deploy your AI Studio app
+Replaces AI-generated LinkedIn posts with pictures of cute kittens! 
 
-This contains everything you need to run your app locally.
+Tired of seeing the same formulaic, AI-generated ("Ah, the ever-evolving landscape...", "It's not X, it's Y", "A testament to...") thought leadership on your LinkedIn feed? This Chrome extension automatically detects and replaces those posts with delightful pictures of kittens.
 
-View your app in AI Studio: https://ai.studio/apps/a3045a9d-5483-476d-ae55-f72b705c0b6c
+## Features
 
-## Run Locally
+- **Rules-Based Detection:** By default, it uses a customizable list of common AI buzzwords and phrases to flag posts.
+- **Fight AI with AI (Experimental):** Add your own Google Gemini API key to use advanced LLM inference to detect if a post is likely AI-generated.
+- **Aggressiveness Filter:** Adjust how strictly the extension blocks posts.
+- **Click to Reveal:** If you're curious about what you missed, you can see why the post was replaced.
 
-**Prerequisites:**  Node.js
+## How to Install
 
+1. Download the extension ZIP file using the web interface.
+2. Unzip the downloaded file.
+3. Open Google Chrome and go to `chrome://extensions/`.
+4. Turn on **Developer mode** (toggle in the top right corner).
+5. Click **Load unpacked** and select the unzipped folder containing the extension files (`extension` or the unzipped folder).
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Architecture
+
+- **Extension:** Standard Manifest V3 Chrome Extension containing content scripts, background service workers (for Gemini API calls), and a configuration popup.
+- **Web App:** A React + Vite web application that acts as a landing page to preview the extension's codebase and download the compiled zip for installation.
+
+## Privacy
+
+If you use the basic rules-based detection, everything runs locally in your browser. No data leaves your machine. If you opt-in to the Experimental Gemini API feature, only the text of the LinkedIn posts is sent securely to Google's Gemini API for analysis using your own API key.

@@ -149,6 +149,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const checked = e.target.checked;
     aiConfigPanel.style.display = checked ? 'block' : 'none';
     chrome.storage.sync.set({ useAI: checked });
+    
+    const toggleStatus = document.getElementById('toggleStatus');
+    if (toggleStatus) {
+      toggleStatus.style.display = 'inline-block';
+      setTimeout(() => toggleStatus.style.display = 'none', 3000);
+    }
+    
     if (checked) {
       setTimeout(() => geminiKeyInput.focus(), 50);
       

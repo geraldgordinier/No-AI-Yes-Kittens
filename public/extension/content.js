@@ -110,7 +110,7 @@ async function checkAI(text) {
         }
       }
     } catch (e) {
-      console.error("[kitten] Gemini API error", e);
+      // Silently fail to avoid console spam
     }
     // Return early to ensure rules-based detection is ignored when AI mode is explicitly turned on with a key.
     return [];
@@ -207,7 +207,13 @@ async function decideAndReplace(post) {
     const isDark = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) || document.documentElement.classList.contains('theme--dark');
     const bgColor = isDark ? '#1d2226' : 'white';
 
-    const cleanedMarkers = matchedMarkers.map(m => m.replace(/"/g, '')).join(', ');
+    const cleanedMarkers = matchedMarkers.map(m => {
+      let cleaned = m.replace(/"/g, '');
+      if (cleaned.toLowerCase() === 'ai mentioned') {
+        return 'AI';
+      }
+      return cleaned;
+    }).join(', ');
 
     const isGeminiResult = matchedMarkers.length > 0 && matchedMarkers[0].includes('% likely AI');
     const reasonPrefix = isGeminiResult ? 'Evaluated as' : 'Contains words';

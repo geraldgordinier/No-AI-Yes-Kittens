@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const data = await response.json();
         sendResponse({ success: true, data });
       } catch (error) {
-        console.error("Gemini API background fetch error:", error);
+        // Silently fail to avoid console spam
         sendResponse({ success: false, error: error.message });
       }
     })();
