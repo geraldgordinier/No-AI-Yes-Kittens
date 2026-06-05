@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>No AI, Yes Kitten Settings</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      width: 340px;
+      padding: 20px;
+      margin: 0;
+      color: #333;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    p.desc {
+      font-size: 13px;
+      color: #666;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    .slider-container {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    input[type=range] {
+      width: 100%;
+      margin: 10px 0;
+      accent-color: #4f46e5;
+    }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: #777;
+    }
+    h3 {
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .rules-list {
+      max-height: 250px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    .rule-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .rule-left {
+      display: flex;
+      flex-direction: column;
+    }
+    .rule-custom {
+      font-weight: 500;
+    }
+    .rule-level {
+      font-size: 11px;
+      color: #888;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 32px;
+      height: 18px;
+    }
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider-switch {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .slider-switch:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider-switch {
+      background-color: #4f46e5;
+    }
+    input:checked + .slider-switch:before {
+      transform: translateX(14px);
+    }
+    .onboarding-tooltip {
+      display: none;
+      position: absolute;
+      background: #4f46e5;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      width: 250px;
+      z-index: 100;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      left: 0;
+      top: 35px; /* adjust relative to container title */
+    }
+    .onboarding-tooltip::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 20px;
+      border-width: 0 6px 6px 6px;
+      border-style: solid;
+      border-color: transparent transparent #4f46e5 transparent;
+    }
+    .onboarding-tooltip.visible {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .tooltip-close {
+      position: absolute;
+      top: 4px;
+      right: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      color: #e0e7ff;
+    }
+    .tooltip-close:hover {
+      color: white;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Filter Aggressiveness</h2>
+  <p class="desc">Adjust how strictly the extension blocks posts with AI terminology.</p>
+  
+  <div class="slider-container">
+    <input type="range" id="aggressionSlider" min="1" max="3" step="1" value="3">
+    <div class="slider-labels">
+      <span id="lbl1">Low</span>
+      <span id="lbl2">Medium</span>
+      <span id="lbl3">High</span>
+    </div>
+  </div>
+
+  <div class="ai-mode-container" style="position: relative; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
+    <div id="onboardingTooltip" class="onboarding-tooltip">
+      <div class="tooltip-close" id="tooltipClose">&times;</div>
+      We're using basic rules by default. Add your Gemini API key to fight AI with AI using kittens!
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <h3 style="margin: 0;">AI detects AI (experimental)</h3>
+      <label class="switch">
+        <input type="checkbox" id="useAIToggle">
+        <span class="slider-switch"></span>
+      </label>
+    </div>
+    <p class="desc" style="margin-bottom: 8px;">Override rules and use Google Gemini to detect AI text directly. Aggressiveness maps directly to AI probability % threshold.</p>
+    <div id="aiConfigPanel" style="display: none; padding-top: 8px;">
+      <label style="font-size: 12px; font-weight: 500; display: block; margin-bottom: 4px;">Gemini API Key</label>
+      <input type="text" id="geminiKeyInput" placeholder="AIzaSy..." style="width: 100%; box-sizing: border-box; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; margin-bottom: 8px;">
+      <div style="font-size: 12px; margin-bottom: 12px;"><a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #4f46e5; text-decoration: none;">Get an API key</a></div>
+      <button id="saveKeyBtn" style="background: #4f46e5; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">Save Key</button>
+      <span id="saveStatus" style="font-size: 12px; color: #10b981; margin-left: 8px; display: none;">Saved!</span>
+    </div>
+  </div>
+
+  <h3 id="rulesHeader">Basic rules-based detection</h3>
+  <div class="rules-list" id="rulesList"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

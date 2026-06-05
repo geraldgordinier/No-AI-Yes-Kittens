@@ -1,0 +1,8 @@
+{
+  "name": "No AI, Yes Kitten",
+  "description": "A Chrome extension that detects AI-generated LinkedIn posts and replaces them with adorable kittens.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
